@@ -505,3 +505,104 @@ mm2,mm2
    from io import StringIO
    f = StringIO(string)
    return f
+
+def score_xlpe_ndiameter():
+   string = '''single core XLPE,diameter mm
+2.5,##
+4,##
+6,##
+10,##
+16,9.3
+25,10.5
+35,11.5
+50,12.9
+70,14.7
+95,17.2
+120,19.6
+150,21.3
+185,23.5
+240,26.6
+300,29.4
+400,33.3
+500,37
+630,41.4
+   '''
+   from io import StringIO
+   f = StringIO(string)
+   return f
+
+def score_pvc_ndiameter():
+   string = '''single core XLPE,diameter mm
+2.5,3.6
+4,4.5
+6,5.1
+10,6.0
+16,6.9
+25,8.4
+35,9.4
+50,10.9
+70,12.4
+95,15.2
+120,17.3
+150,18.8
+185,21.1
+240,24.1
+300,26.9
+400,30.6
+500,34.1
+630,37.8
+   '''
+   from io import StringIO
+   f = StringIO(string)
+   return f
+
+
+def mcore_pvc_ndiameter():
+   string = '''Multicore PVC,diameter mm
+2.5,13.5
+4,15.5
+6,17
+10,19.3
+16,21.6
+25,##
+35,##
+50,##
+70,##
+95,##
+120,##
+150,##
+185,##
+240,##
+300,##
+400,##
+500,##
+630,##
+   '''
+   from io import StringIO
+   f = StringIO(string)
+   return f
+
+def mcore_xlpe_ndiameter():
+   string = '''Multicore XLPE,diameter mm
+2.5,##
+4,##
+6,##
+10,##
+16,20.4
+25,23.1
+35,25.7
+50,29.7
+70,34.4
+95,38.8
+120,44.8
+150,49.9
+185,56.1
+240,62.6
+300,74.1
+400,##
+500,##
+630,##
+   '''
+   from io import StringIO
+   f = StringIO(string)
+   return f

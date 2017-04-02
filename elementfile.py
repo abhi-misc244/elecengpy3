@@ -11,13 +11,15 @@ class cableclass(object):
         import elecengpy
         import csv
 
-        #f = elecengpy.datafile.mcore_xlpe_res_data()
-
+        #getting data for resistance, reactance and nominal diameter
         if (self.core == '2c+e' or '3c+e' or'4c+e' or 'multicore') and (self.insulation.lower() == 'xlpe'):
             f = elecengpy.datafile.mcore_xlpe_res_data()
+            f1 = elecengpy.datafile.mcore_xlpe_ndiameter()
         elif (self.core == '2c+e' or '3c+e' or'4c+e' or 'multicore') and    (self.insulation.lower() == 'pvc'):
             f = elecengpy.datafile.mcore_pvc_res_data()
+            f1 = elecengpy.datafile.mcore_pvc_ndiameter()
         elif (self.core == '1c' or 'single core') and (self.insulation.lower() == 'xlpe'):
+            f1 = elecengpy.datafile.score_xlpe_ndiameter()
             f = elecengpy.datafile.score_xlpe_res_data()
         elif (self.core == '1c' or 'single core') and (self.insulation.lower() == 'pvc'):
             f = elecengpy.datafile.score_pvc_res_data()
@@ -26,10 +28,24 @@ class cableclass(object):
             self.size = 'Almond'
             #print (f)
 
+        #getting data for resistance and reactance for specific cable
         reader = csv.reader(f)
-        table = list(reader)
-        del table[0]
-        del table[0]
+        table = list(reader) #for cable data
+        del table[0] #delete header row
+        del table[0] # Delete first row
+        i = 0
+        row = 0
+        for x in table:
+            if str(self.size).lower() == x[0].lower():
+                row = i
+            i = i+1
+        self.reactance = float(table[row][1]) * self.length
+        self.resistance = float(table[row][2]) * self.length
+
+        #Getting data for nominal diameter of specific cable
+        reader = csv.reader(f1)
+        table = list(reader) #for cable data
+        del table[0] #delete header row
         i = 0
         row = 0
         for x in table:
@@ -38,9 +54,9 @@ class cableclass(object):
             i = i+1
         #print (row)
         #print (table)
-        self.reactance = float(table[row][1]) * self.length
-        self.resistance = float(table[row][2]) * self.length
+        self.ndiameter = str(table[row][1])
 
+        #Getting data for Ampacity
         if (self.core == '2c+e' or '3c+e' or'4c+e' or 'multicore') and (self.insulation =='pvc') and (self.install == 'unenclosed'):
             f = elecengpy.datafile.mcore_pvc_unenclosed_amp()
         elif (self.core == '2c+e' or '3c+e' or'4c+e' or 'multicore') and (self.insulation =='pvc') and (self.install == 'direct buried'):
@@ -71,12 +87,13 @@ class cableclass(object):
         del table[0]
         i = 0
         row = 0
+        self.ampacity = 0.0
         for x in table:
-            if self.size == float(x[0]):
+            if str(self.size).lower() == x[0].lower():
                 self.ampacity = float(x[1])
 
+        #Getting data for earth Conductor size
         f = elecengpy.datafile.earthsize()
-
         reader = csv.reader(f)
         table = list(reader)
         del table[0]
@@ -88,21 +105,18 @@ class cableclass(object):
                 self.earthsize = float(x[1])
 
 
-
     def changesize(self, size):
         '''
         size shall be passed in number
         '''
         self.size = size
-
         self.updatedata()
 
     def changelength(self, var):
         #Length shall be passed in kilometers
-        print ('something here')
-        '''self.length = var
-        #self.updatedata()
-        print ('the length is ', self.length)'''
+        self.length = var
+        self.updatedata()
+        print ('the length is ', self.length)
     def changecore(self, core):
         '''
         core shall be passed in string
@@ -114,8 +128,12 @@ class cableclass(object):
         insulation shall be passed in string
         '''
         self.insulation = insulation
+
+        #Work in progress
+        '''
         if self.insulation == 'aerial':
             self.size = 'Almond'
+            '''
         self.updatedata()
     def changeinstall(self, install):
         self.install = install
